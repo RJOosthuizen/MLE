@@ -21,7 +21,7 @@ grad = zeros(size(theta));
 %
 
 #cost function
-J = (1 / m) * [(-y' * log(sigmoid(X * theta))) - ((1 - y') * log(1 - sigmoid(X * theta)))];
+J = (-1 / m) * [(y' * log(sigmoid(X * theta))) + ((1 - y') * log(1 - sigmoid(X * theta)))];
 
 #gradient
 grad = (1 / m ) * (X' * (sigmoid(X * theta) - y));
