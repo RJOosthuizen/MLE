@@ -42,3 +42,37 @@ fprintf(' %f \n', grad);
 
 fprintf('\nProgram paused. Press enter to continue.\n');
 pause;
+
+#optimize using fminunc
+
+#options for fminunc function
+options = optimset('GradObj', 'on', 'MaxIter', 400);
+
+[theta, cost] = fminunc(@(t)(costFunction(t, X, y)), initial_theta, options);
+
+fprintf('Cost at theta found by fminunc: %f\n', cost);
+fprintf('theta: \n');
+fprintf(' %f \n', theta);
+
+#plot line
+plotDecisionBoundary(theta, X, y);
+
+hold on;
+xlabel('scenario 1');
+ylabel('scenario 2');
+legend('positive', 'negative');
+hold off;
+
+fprintf('\nProgram paused. Press enter to continue.\n');
+pause;
+
+#predict + accuracy
+prob = sigmoid([1 45 85] * theta); #test
+fprintf(['For a score 1 = 45 and score 2 = 85, we predict an admission probability of %f\n'], prob);
+
+# Compute accuracy on our training set
+p = predict(theta, X);
+
+#check where p == y so some amount will be equal of 100
+fprintf('Train Accuracy: %f\n', mean(double(p == y)) * 100);
+fprintf('\n');
