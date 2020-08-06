@@ -1,0 +1,30 @@
+/* . is class */
+.firstDiv{
+  color: blue;
+}
+
+.secondDiv{
+  color: red;
+}
+
+/* # is id */
+#singeledout{
+  color: green;
+  text-decoration: line-through;
+}
+
+h3 + ul{
+  border: 4px dotted purple;
+}
+/* all lists next to an h3 tag */
+
+li a{
+  color: red;
+}
+/* all a tags within li tags */
+
+li a[href="https://www.youtube.com"]{
+  color: blue;
+  border: 5px solid orange;
+}
+/* select by attribute */

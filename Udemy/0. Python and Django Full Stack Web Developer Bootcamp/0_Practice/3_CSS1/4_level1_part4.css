@@ -1,0 +1,13 @@
+li{
+  color: red;
+}
+
+.topitems{
+  color: blue;
+}
+/* class > tag */
+
+#two{
+  border: 3px solid black;
+}
+/* id > class > tag */

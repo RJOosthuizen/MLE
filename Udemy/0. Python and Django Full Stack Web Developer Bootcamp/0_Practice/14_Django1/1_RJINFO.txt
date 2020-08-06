@@ -1,0 +1,102 @@
+create venv:
+conda create --name [enter venv name here] django
+
+!!if you get python 2 as prefered install then do this first(will specify version first)
+conda create --name [enter venv name here] python=3.8
+
+activate venv:
+conda activate [enter venv name here]
+
+deactivate:
+conda deactivate
+
+!!check list of all envs
+conda info --envs
+
+
+DJANGO
+1. create your first project (activate venv first)
+django-admin startproject [enter project name]
+
+files that will be created:
+FolderProjectname:
+  __init__: blank script that due to its special name lets python know that this directory can be treated as a package
+  settings: store all project settings
+  urls: store all url patterns (basically the different pages of your web application)(REGEX!)
+  wsgi: web service gateway interface (help to deploy web app to prod)
+manage: will use this a lot
+
+2. run the project
+in directory type:
+python manage.py runserver
+
+SAMPLE RESPONSE:
+'''
+You have 17 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+August 05, 2020 - 20:51:08
+Django version 3.0.9, using settings 'RJFirstProject.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+'''
+
+copy and paste url in browser to see web page
+
+turn off debug mode if going to production
+
+migrations allows you to move databases from one design to another, this is also reversible(field changes etc)
+
+project is plit into apps
+can reuse apps or use other peoples apps
+app = certain area of functionality
+
+
+3 create application
+python manage.py startapp [application name]
+
+files that will be created:
+FolderApplicationName:
+  migrationsfolder: stores database specific info as it relates to the models
+    __init__:
+  __init__: same as above(shows that this directory can be treated as a package)
+  admin: register models here which django will then use them with djangos admin interface
+  apps: place application specific configurations
+  models: store applications data models (use alot)
+  tests: store test functions to test your code
+  views: functions that handle requests and return responses(use alot)
+
+
+have to link new application to settings.py
+add under installed apps:
+append your app name to list
+
+
+add view:
+application
+views.py
+Check code there(hello world)
+
+after that map view to urls.py file
+check code there
+
+runserver to check that it is working
+
+use new linking method of urls to link app to project
+this includes creating your own urls file in the app
+
+
+
+
+create templates folder under main project folder and the a sub folder per app (OR main template files like index.html) (CHECK NEW METHOD OF SUBFOLDERS)
+projectfolder
+  templates
+    apptemlates(RJFirstApp)
+
+in project settings.py check code for creating new dir
+and add to templates list under dirs
+
+link correctly
+
+static files
+create static folder(static) - store images(add image folder underneath)
+link and add like templates

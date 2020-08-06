@@ -1,0 +1,23 @@
+body{
+  background-color: gray;
+  /* can do image */
+  /* background: url("your url") */
+  /* background-repeat: repeat OR norepeat */
+}
+
+div{
+  background-color: blue;
+  border-color: red;
+  border-width: 10px;
+  border-style: dotted;
+}
+
+p{
+  color: white;
+}
+/* all p inside and outside div */
+
+span{
+  background: red;
+  color: black;
+}

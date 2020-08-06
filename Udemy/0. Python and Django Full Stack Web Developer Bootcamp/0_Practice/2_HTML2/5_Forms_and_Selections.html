@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Hotel Feedback</title>
+  </head>
+  <body>
+
+    <h1>Hotel Feedback Form</h1>
+    <form method="get">
+      <h2>Are you from Inside the US or outside the US</h2>
+
+      <label for="inusa">Inside</label>
+      <input id="inusa" type="radio" name="loc" value="inside">
+      <label for="outusa">Outside</label>
+      <input id="outusa" type="radio" name="loc" value="outside">
+<!-- give rdio same name to link selection -->
+<!-- give value to assign to name var -->
+    <h2>How was your service?</h2>
+    <select class="drpstarsclass" name="stars">
+      <option value="Great">3</option>
+      <option value="Okay">2</option>
+      <option value="Bad">1</option>
+    </select>
+    <!-- select = dropdown -->
+
+    <h2>any other feedback?</h2>
+    <textarea name="mytext" rows="8" cols="80"></textarea>
+    <!-- longer values -->
+    <input type="submit" name="" value="Submit">
+    </form>
+
+  </body>
+</html>

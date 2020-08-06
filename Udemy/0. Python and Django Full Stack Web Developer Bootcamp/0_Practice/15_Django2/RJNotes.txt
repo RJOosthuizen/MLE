@@ -1,0 +1,102 @@
+models used to insert data into database and retrieve from database
+
+in settings.py you can edit the engine param for databases
+
+use class structure (inherit from models.model)
+define attributes as column names
+
+
+then migrate db
+python manage.py migrate
+python manage.py makemigrations appname
+python manage.py migrate
+
+
+use shell to play  with models
+
+register model to admin
+from django.contrib import admin
+from app.models import model1, model2
+admin.site.register(model1)
+admin.site.register(model2)
+
+
+create super user:
+python manage.py createsuperuser
+give name email and password
+
+
+PRACTICAL SUMMARY
+in models.py create your models
+python manage.py migrate
+python manage.py makemigrations first_app
+python manage.py migrate
+use shell to test: python manage.py shell
+in shell:
+  from first_app.models import modelname (in this case topic)
+  print(Topic.objects.all())
+  #insert
+  t = Topic(top_name="The social network")
+  t.save()
+  print(Topic.objects.all())
+
+  ADMIN
+  admin.py
+  from first_app.models import AccessRecord, Topic, Webpage
+  admin.site.register(AccessRecord)
+  admin.site.register(Topic)
+  admin.site.register(Webpage)
+
+  createsuperuser:
+  python manage.py createsuperuser
+  python manage.py runserver
+  go to web browser and go to /admin
+
+
+
+EXTRA: CHECK FAKER LIB FOR INSERTING DUMMY DATA
+
+
+
+MVT(models views templates)
+render dynamic code
+1. views.py - import models we need
+2. use view to query model
+3. pass results from model to template
+4. edit template so that it is ready to accept and diplay data from the model
+5. map url to view
+
+
+views.py:
+  from first_app.models import Topic, Webpage, AccessRecord
+  in class:
+    webpages_list = AccessRecord.objects.order_by("date")
+    date_dict = {"access_records": webpages_list}
+    return render(request, "first_app/index.html", context=date_dict)
+index.html:
+  {% load static %}
+
+
+  <div class="djangtwo">
+    {% if access_records %}
+    <table>
+      <thead>
+        <th>Site Name</th>
+        <th>Date Accessed</th>
+      </thead>
+
+    {% for acc in access_records %}
+    <tr>
+      <td>{{ acc.name }}</td>
+      <td>{{ acc.date }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>NO ACCESS RECORDS FOUND</p>
+  {% endif %}
+  </div>
+
+
+
+  DEBBUGING = look in webpage for error when getting errors
