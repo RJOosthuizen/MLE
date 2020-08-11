@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% extends "Movies/base.html" %}
+  {% block body_block %}
+
+    <!-- add movie -->
+    <div class="container">
+      <h1>Add Movie</h1>
+      <form class="form-horizontal" method="POST">
+        <div class="form-group">
+          {{ movie_form.as_p }}
+          {% csrf_token %}
+          <input type="submit" class='btn btn-primary' value="Submit">
+        </div>
+      </form>
+    </div>
+  {% endblock %}

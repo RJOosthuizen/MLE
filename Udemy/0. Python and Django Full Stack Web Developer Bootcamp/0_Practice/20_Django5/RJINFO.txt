@@ -1,0 +1,195 @@
+setup ability to authenticate users
+
+need to reference built in app in the INSTALLED_APPS list in settings.py:
+django.contrib.auth
+django.contrib.contenttypes
+#often these should be pre loaded for you already
+#remember to migrate if you added them
+
+store passwords safely #never store as text
+will use pbkdf2 algorithm with an sha256 hash that is built-in to Django #can add more algorithms as well
+
+can use bcrypt and argon2 libs to strengthen
+
+in venv:
+  pip install bcrypt
+  pip install django[argon2]
+#may already have these installed
+
+pass the list of PASSWORD_HASHERS to try in the order you want to try them
+#if you dont have support for the newly installed algorithms it will fall back to the pbkdf2 algorithm
+
+
+can also prevent users from adding dumb passwords
+
+
+#PASSWORDS PRACTICAL
+pip/conda install bcrypt
+pip/conda install django[argon2]
+
+in settings.py
+  just above AUTH_PASSWORD_VALIDATORS:
+  PASSWORD_HASHERS = [
+      'django.contrib.auth.hashers.Argon2PasswordHasher', #remove this one as it dit not work
+      'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+      'django.contrib.auth.hashers.BCryptPasswordHasher',
+      'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+      'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+  ]
+
+  will try first one and move down list
+
+  AUTH_PASSWORD_VALIDATORS already has some vals listed, here you add more
+  EG added options below:
+  AUTH_PASSWORD_VALIDATORS = [
+      {
+          'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+      },
+      {
+          'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+          'OPTIONS':{'min_length':9}
+      },
+      {
+          'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+      },
+      {
+          'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+      },
+  ]
+
+
+SETUP Template, static and media dirs
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+
+list TEMPLATE_DIR in templates dirs list like normal
+
+
+media vs static:
+  static = what you have as resources for the website
+  media = what the user can upload to the website(like pp)
+
+
+static at the bottom:
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+media at the bottom:
+#MEDIA
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
+
+
+
+USER MODELS
+django built in user auth models
+how to setup media files in a project
+
+some features of the User object:
+  Username
+  Email
+  Password
+  First Name
+  Surname
+  attributes:
+    is_active
+    is_staff
+    is_superuser
+  can add more attributes
+
+bv:
+from django.contrib.auth.models import User
+
+#create your models here.
+class UserProfileInfo(models.Model):
+
+  #create relationship (dont inherit from User!)
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+  #add any additional attributes you want
+  portfolio_site = models.URLField(blank=True)
+  profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
+
+  def __str__(self):
+    #built-in attribute of django.contrib.auth.models.User
+    return self.user.username
+
+#CAN LOOK AT TENANT ID HERE
+
+#CREATE THE 'profile_pics' folder under media
+
+#imagefield to upload images
+conda install pillow
+if get error then type:
+pip install pillow --global-option="build-text" --global-option="--disable-jpeg"
+
+
+once model created have to REGISTER!
+admin.site.register(UserProfileInfo)
+
+
+
+#css and js etc go in static with STATIC_ROOT
+#user uploaded content wil go to media folder with MEDIA_ROOT
+
+next you want to implement a django form so that the user can work with that on the website
+eg in forms.py:
+from django import forms
+from django.contrib.auth.models import User
+from basic_app.models import UserProfileInfo
+
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta():
+        model = User
+        fields = ('username', 'email', 'password')
+
+class UserProfileInfoForm(forms.ModelForm):
+  # portfolio = forms.URLField(required=False)
+  # picture = forms.ImageField(required=False)
+
+  class Meta():
+    model = UserProfileInfo
+    fields = ('portfolio_site', 'profile_pic')
+
+
+
+Create html files registration and login #check project as example
+check enctype for images also see that do not need doc type if already in base
+
+
+REGISTRATION
+primarily work in views.py
+check if post request and perform action
+like save to db or commit=False to manipulate data before save to db
+
+LOGINS
+login/logout
+1 setup special login views
+2 use built in recorators for access
+3 add LOGIN_URL in settings
+4 create login.html
+5 edit urls.py files
+
+
+#implement login
+settings.py
+at bottom
+#LOGIN
+LOGIN_URL = '/basic_app/user_login'
+
+edit html:
+check base.html and login.html
+
+
+views.py file #check there for logic
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+# from django.core import reverse
+from django.contrib.auth.decorators import login_required
+
+#CHECK DJANGO OFFICIAL DOCS MAYBE FOR THIS AS IT SEEMS OUTDATED

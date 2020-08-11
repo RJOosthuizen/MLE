@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends "movies/base.html" %}
+
+  {% block body_block %}
+    <!-- content -->
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Welcome to the Rating site</h1>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Actions</strong></h3>
+          </div>
+          <div class="panel-body">
+            <div class="list-group">
+              <a href="{% url 'Movies:movie_list' %}" class="list-group-item">
+                <h3 class="list-group-item-heading">View</h3>
+                <p class="list-group-item-text">Go to /Movies to view all movies</p>
+              </a>
+              <a href="{% url 'Movies:add_movie' %}" class="list-group-item">
+                <h3 class="list-group-item-heading">Add</h3>
+                <p class="list-group-item-text">Go to /Add to add movie</p>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  {% endblock %}

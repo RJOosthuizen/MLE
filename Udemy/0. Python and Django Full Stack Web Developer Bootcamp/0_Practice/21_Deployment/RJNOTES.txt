@@ -1,0 +1,30 @@
+deploy python anywhere guide:
+https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/
+
+deploy to Heroku
+https://devcenter.heroku.com/articles/deploying-python
+
+deploy to amazon web services
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create-deploy-python-django.html
+
+deploy to VPS(virtual private server)
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-local-django-app-to-a-vps
+
+
+some other stuff to learn:
+  ORM's
+  Advanced User authentication
+  Social Login
+  Payments
+  REST APIs
+  Encryption
+  Testing
+  Sessions
+  Cookies
+  Class Based Views
+  +more
+
+  GIT and GITHUB
+  git = version control system
+  github = manage git and host files
+  

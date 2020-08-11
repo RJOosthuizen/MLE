@@ -1,0 +1,122 @@
+django forms advantages
+quicly generate html form widgets
+validate data and process yo python data structure
+create form versions of models and quickly update models from forms
+
+create forms.py in application
+call django form classes(looks like creating models)
+example:
+  from django import forms
+  class FormName(forms.form):
+    name = forms.CharField()
+    email = forms.EmailField()
+    text = forms.CharField(widget=forms.Textarea)
+
+show by using a view
+views.py
+  import your forms
+
+  from . import forms OR
+  from forms import FormName
+
+  def form_name_view(request):
+    form = forms.FormName()
+    return render(request, 'form_name.html', {'form':form})
+
+add to urls.py
+  from basicapp import views
+  urlpatterns = [
+    path('formpage/', views.form_name_view, name='form_name')
+  ]
+
+create template folder with html file (remember to update settings.py with Template_dir)
+in html file:
+  {{form}} OR
+
+  div class container
+    form method post
+      {{form.as_p}} #as_p = as paragraph #check docs for other methods
+      {% csrf_token %} #security: cross site request forgery token (secures the http post action)
+      input type submit class btn btn-primary value submit
+
+
+http: communication between client and server
+get: get data from a resource
+post: submit data to resource
+
+
+to get info back to db:
+more formal views.py file
+  def form_name_view(request):
+    form = forms.FormName()
+
+    #check to see if we get POST back
+    if request.method == 'POST':
+      #then we pass request
+      form = forms.FormName(request.POST)
+
+      #check if form is valid
+      if form.is_valid():
+        #do something
+        print('Form validation success. Prints in console')
+        print('Name' + form.cleaned_data['name'])
+        print('Email' + form.cleaned_data['email'])
+        print('Text' + form.cleaned_data['text'])
+    return render(request, 'basicapp/form_page.html', {'form':form})
+
+
+VALIDATION
+forms.py
+hidden fields to catch bots
+botcatcher = forms.CharField(required=False,
+                              widget = forms.HiddenInput) # check in dom inspector
+
+    def clean_botcatcher(self): #check if value has been changed my bot #WILL NOT REALLY USE THIS
+        botcatcher = self.cleaned_data['botcatcher']
+        if len(botcatcher) > 0:
+          raise forms.ValidationError("bot found")
+        return botcatcher
+
+RATHER USE THIS
+
+#outside class
+from django.core import validators
+
+def check_for_z(value):
+  if value[0].lower() != 'z':
+    raise forms.ValidationError('Needs to start with z')
+
+#inside class
+name = forms.CharField(validators=[check_for_z])
+botcatcher = forms.CharField(required=False,
+                            widget = forms.HiddenInput, #check in dom inspector
+                            validators = [validators.MaxLengthValidator(0)]) #CHECK DOCS FOR ALL VALIDATORS
+
+
+val whole form
+  in class
+  verify_email = forms.EmailField(label='Verify Email')
+
+  def clean(self): #indicate to clean entire form
+      all_clean_data = super().clean()
+      email = all_clean_data['email']
+      vmail = all_clean_data['verify_email']
+
+      if email != vmail:
+          raise forms.ValidationError('Emails must match')
+
+
+
+
+MODEL FORMS
+save to model #CHECK EXAMPLE
+example
+forms.py
+from django import forms
+from myapp.models import MyModel
+class mynewform(forms.ModelForm):
+  #form fields go here #dont really need to create the fields here (wil get from model and will also help with security)
+  #if want to use validators then you need to supply fields here, but model has own validators
+  class Meta: #connect fields to model
+    model = MyModel
+    fields = __all__ OR ['field1', 'field2'] #list of fields to exclude OR ('field1','field2') #list of fields to include

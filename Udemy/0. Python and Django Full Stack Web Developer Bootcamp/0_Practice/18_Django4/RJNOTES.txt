@@ -1,0 +1,87 @@
+poor practice to hard code any paths
+
+old:
+<a href="basicapp/thankyou">Thanks</a>
+
+new:
+<a href="{% url 'thanku' %}">Thanks</a>
+thanku is in the urls,py file
+OR
+<a href="{% url 'basicapp.views.thankyou' %}">Thanks</a> #depreciated
+OR(suggested)
+in urls.py file add var app_name = 'string, same as app name'
+<a href="{% url 'basicapp:thankyou' %}">Thanks</a> #depreciated
+
+after adding this and referencing other apps you need to make migrations(like when linking to admin page as example)
+
+#THE NAME AFTER THE : IS THE NAME OF THE VIEW FUNCTION BUT IF YOU GIVE NAME IN URLS FILE THEN IT IS THAT NAME
+
+template inheritance(extending)
+create base template to inherit from
+eg navbar
+1find repetitive parts of project
+2create base template of them
+3set the tags in the base template
+4extend and call those tags anywhere
+
+eg
+base.html
+  <links to JS, CSS, Bootstrap>
+  <bunch of html like navbars>
+    body
+      {% block body_block %}
+      {% endblock %}
+    body
+  <more footer html>
+
+  link Bootstrap in base.html so you dont have to link it on all other pages
+  put extends stuff in div container as well (tip)
+
+other.html
+  doctype html
+  {% extends "basic_app/base.html" %}
+  {% block body_block %}
+    <html for other.html>
+  {% endblock %}
+
+
+
+
+  TEMPLATE FILTERS
+
+  have some information from your model thath you want to use accross various views/pages
+  but want to make a slight edit to the information before injecting it like string or arithmetic operations
+
+  general filter form:
+    {{ value | filter:'parameter' }}
+    not all filters take in parameters
+    these filters already based from python functions so should look familiar
+    CHECK DOCS
+
+  load in template/html file:
+  {% load my_templates %} #my_templates = your templates .py file
+  it contains the extra template tags
+  the .py file directly inderneath the template tags folder
+
+  CHECK EXAMPLE
+
+  CREATE OWN FILTERS
+  in app create folder: templatetags
+    file: __init.py
+    file: my_extras.py #can be any name
+
+in my_extras:
+  #register
+  from django import template
+
+  register = template.Library()
+
+  #own filter
+  @register.filter(name='cut')
+  def cut(value, arg):
+      return value.replace(arg,'')
+
+  register.filter('cut', cut) #string one is what you will call it in html and normal one is the function #OLD
+
+
+CHECK HOW TO LINK TO HTML (CHECK ON DJANGO DOCS)

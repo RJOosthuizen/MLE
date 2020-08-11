@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "Movies/base.html" %}
+  {% block body_block %}
+
+    <!-- display movies -->
+    {% if movies %}
+    <div class="container">
+      <h1>List of movies</h1>
+      <table class="table table-striped table-condensed">
+        <thead>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Rating</th>
+        </thead>
+        {% for movie in movies %}
+        <tr>
+          <td>{{movie.name}}</td>
+          <td>{{movie.year}}</td>
+          <td>{{movie.rating}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% else %}
+      <p>No Movies</p>
+    {% endif %}
+  {% endblock %}
