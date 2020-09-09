@@ -27,4 +27,146 @@ some other stuff to learn:
   GIT and GITHUB
   git = version control system
   github = manage git and host files
-  
+
+  check git repo for deployment (DjangoTestDeployment)
+  create repo
+  without readme
+  add gitignore
+
+  clone to pc
+  copy your project in there
+  commit and push
+
+  #deploying
+  python anywhere (signup and login)
+  copy repo url eg: https://github.com/RJOosthuizen/DjangoTestDeployment.git
+
+  consoles: interact with python and bash console instances
+  files: host files(project?)
+  web: configure hosted settings
+  schedule/tasks?: execute tasks at certain time
+  databases: configure mysql/postgress dbs
+
+  will mostly only work with consoles and web tab
+
+  console:
+    setup venv
+    click on bash:
+      mkvirtualenv --python=python3.8 VENVNAME
+      will create venv
+      will then see venv in cmd path that means it is activated
+
+      pip list to see all packages
+
+      pip install -U django==[same version as on pc venv]
+      to get own version:
+        activate python in terminal with "python"
+        import django
+        django.__version__
+      to check if isntalled type: which django-admin.py
+      should get something that says VENVNAME/django-admin.py
+
+      install all other libs the same way!
+
+      next: copy git repo into console
+      git clone YOUR URL (eg git clone https://github.com/RJOosthuizen/DjangoTestDeployment.git)
+      if private have to supply password and username
+      if have 2fa on then generate access token (https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+
+
+      IN LATER CLONE PROJECTS WILL LOOK AT MORE SECURE DEPLOYMENT (like removing security key/token from project)
+
+      ls - list all files
+      cd into project folder (should see 'master' or branch in end of cwd) eg cd DjangoTestDeployment
+      cd into project eg cd RateStuff (if ls now should see all elements of project)
+
+      migrate models:
+        python manage.py migrate
+        python manange.py makemigrations APPNAME
+        python manage.py migrate
+
+      create super user
+        python manage.py createsuperuser(maybe not?)
+
+  edit wsgi settings (what happens when someone hits your web)
+  go to dashboard > web:
+    add new webapp - follow instructions
+      can put custom domain name
+      Or take one provided eg: RJOos.pythonanywhere.com (should see in config page as you create new website)
+      click on next and manual configuration
+      choose python ver
+      will create wsgi file that we will point to our file
+      open RJOos.pythonanywhere.com in new tab (should take you to a hello world page)
+      click on link that says web app setup
+
+  web app setup
+      scroll until see virtualenv
+      enter path to venv:
+        /home/username/.virtualenvs/VENVNAME
+        eg /home/RJOos/.virtualenvs/RJDjangoEnv (should validate)
+
+      scroll to code section
+        get file path:
+          ls
+          cd into projectfolder
+          cd into project
+          pwd
+          eg /home/RJOos/DjangoTestDeployment/RateStuff
+          paste in source code path(should validate)
+
+        click on wsgi config file link under code:
+            delete line 13-47 (hello world page)
+
+            scroll down to django and uncomment until it looks like this: (also edut path var(check below))
+            also check we added a os.chdir (change directory)
+            also added settings.py (environ)
+
+            # +++++++++++ DJANGO +++++++++++
+# To use your own django app use code like this:
+import os
+import sys
+#
+## assuming your django settings file is at '/home/RJOos/mysite/mysite/settings.py'
+## and your manage.py is is at '/home/RJOos/mysite/manage.py'
+path = '/home/RJOos/DjangoTestDeployment/RateStuff'
+if path not in sys.path:
+    sys.path.append(path)
+
+os.chdir(path)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "RateStuff.settings")
+
+import django
+django.setup()
+#
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
+#
+## then:
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
+
+CLICK ON SAVE
+
+go back to web:
+  under static files:
+    eg link css and js
+    link admin static files and your own static files
+    admin:
+      URL: /static/admin
+      Directory: /home/RJOos/.virtualenvs/VENVNAME/lib/pythonANDVERSIONNUMBER/site-packages/django/contrib/admin/static/admin
+      eg: /home/RJOos/.virtualenvs/RJDjangoEnv/lib/python3.8/site-packages/django/contrib/admin/static/admin
+
+      reload web app on top of page(green button)
+
+    own static files:
+      URL: /static/
+      Directory: /home/RJOos/DjangoTestDeployment/RateStuff/static
+
+
+turn of debug mode and add hosts:
+  go to files:
+    settings.py
+    ALLOWED_HOSTS = ['username.pythonanywhere.com']
+    eg ALLOWED_HOSTS = ['RJOos.pythonanywhere.com']
+
+    DEBUG = False #removes exposure of code (can later put own 404 pages as well)
